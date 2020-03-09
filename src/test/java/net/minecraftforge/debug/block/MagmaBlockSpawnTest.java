@@ -1,8 +1,9 @@
 package net.minecraftforge.debug.block;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.common.extensions.IForgeBlock;
@@ -19,21 +20,28 @@ public class MagmaBlockSpawnTest {
     @SubscribeEvent
     public static void onEntitySpawned(LivingSpawnEvent event)
     {
-        // Check to see if the entity that spawned was on top of a block of lava. If it did, then it means the
-        // canCreatureSpawn event returned true, i.e., the wrong value
-        BlockPos currBlockPos = new BlockPos(event.getX(), event.getY(), event.getZ());
-        Validate.isTrue(!(event.getWorld().getBlockState(currBlockPos).getMaterial() == Material.LAVA));
-    }
-
-    @SubscribeEvent
-    public static void onEntitySpawnedV2(LivingSpawnEvent event)
-    {
-        // Similar to onEntitySpawned, this makes an explicit call to canCreatureSpawn and checks to see if it's
-        // returning the right value with a direct call
+        // We make a check to see if canCreatureSpawn returns the right value if we pass it an entity type of null
+        // We expect it to return false as per the changes to the method
         BlockPos currBlockPos = new BlockPos(event.getX(), event.getY(), event.getZ());
         IWorld world = event.getWorld();
         BlockState state = world.getBlockState(currBlockPos);
         EntitySpawnPlacementRegistry.PlacementType type = EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS;
         Validate.isTrue(!((IForgeBlock)state).canCreatureSpawn(state, world, currBlockPos, type, null));
+    }
+
+    @SubscribeEvent
+    public static void onZombieSpawned(LivingSpawnEvent event)
+    {
+        // We make a check to see if canCreatureSpawn returns the right value if we pass it an entity type of ZOMBIE
+        // We expect it to return true as per the changes to the method
+        BlockPos currBlockPos = new BlockPos(event.getX(), event.getY(), event.getZ());
+        IWorld world = event.getWorld();
+        BlockState state = world.getBlockState(currBlockPos);
+        Entity enti = event.getEntity();
+        EntitySpawnPlacementRegistry.PlacementType type = EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS;
+        if(enti.getType() == EntityType.ZOMBIE)
+        {
+            Validate.isTrue(((IForgeBlock)state).canCreatureSpawn(state, world, currBlockPos, type, EntityType.ZOMBIE));
+        }
     }
 }

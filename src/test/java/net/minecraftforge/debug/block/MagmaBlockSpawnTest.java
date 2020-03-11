@@ -39,7 +39,7 @@ public class MagmaBlockSpawnTest {
         // pass null for the entity type and ensure we get false when we check to see if a creature can spawn on
         // a magma block
         MagmaBlock block = new MagmaBlock((Block.Properties) state.getProperties());
-        Validate.isTrue(block.canEntitySpawn(state, world, currBlockPos, null));
+        Validate.isTrue(!(block.canEntitySpawn(state, world, currBlockPos, null)));
 
     }
 

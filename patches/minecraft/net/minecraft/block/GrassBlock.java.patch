@@ -1,0 +1,23 @@
+--- a/net/minecraft/block/GrassBlock.java
++++ b/net/minecraft/block/GrassBlock.java
+@@ -10,12 +10,12 @@
+ import net.minecraft.world.gen.feature.FlowersFeature;
+ import net.minecraft.world.server.ServerWorld;
+ 
+-public class GrassBlock extends SpreadableSnowyDirtBlock implements IGrowable {
++public class GrassBlock extends SpreadableSnowyDirtBlock implements IGrowable, net.minecraftforge.common.IPlantable {
+    public GrassBlock(Block.Properties p_i48388_1_) {
+       super(p_i48388_1_);
+    }
+ 
+-   public boolean func_176473_a(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
++   public boolean canGrow(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
+       return p_176473_1_.func_180495_p(p_176473_2_.func_177984_a()).func_196958_f();
+    }
+ 
+@@ -71,4 +71,5 @@
+       }
+ 
+    }
++    @Override public BlockState getPlant(IBlockReader world, BlockPos pos) { return world.func_180495_p(pos); }
+ }

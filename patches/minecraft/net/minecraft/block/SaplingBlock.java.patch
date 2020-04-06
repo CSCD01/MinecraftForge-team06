@@ -8,7 +8,7 @@
        if (p_225534_2_.func_201696_r(p_225534_3_.func_177984_a()) >= 9 && p_225534_4_.nextInt(7) == 0) {
           this.func_226942_a_(p_225534_2_, p_225534_3_, p_225534_1_, p_225534_4_);
        }
-@@ -39,6 +40,7 @@
+@@ -39,17 +40,18 @@
        if (p_226942_3_.func_177229_b(field_176479_b) == 0) {
           p_226942_1_.func_180501_a(p_226942_2_, p_226942_3_.func_177231_a(field_176479_b), 4);
        } else {
@@ -16,3 +16,22 @@
           this.field_196387_c.func_225545_a_(p_226942_1_, p_226942_1_.func_72863_F().func_201711_g(), p_226942_2_, p_226942_3_, p_226942_4_);
        }
  
+    }
+ 
+-   public boolean func_176473_a(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
++   public boolean canGrow(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
+       return true;
+    }
+ 
+    public boolean func_180670_a(World p_180670_1_, Random p_180670_2_, BlockPos p_180670_3_, BlockState p_180670_4_) {
+-      return (double)p_180670_1_.field_73012_v.nextFloat() < 0.45D;
++      return canUseFertilizer(p_180670_1_, p_180670_2_, p_180670_3_, p_180670_4_, (net.minecraftforge.plants.IFertilizer) net.minecraft.item.Items.field_196106_bc);
+    }
+ 
+    public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) {
+@@ -59,4 +61,5 @@
+    protected void func_206840_a(StateContainer.Builder<Block, BlockState> p_206840_1_) {
+       p_206840_1_.func_206894_a(field_176479_b);
+    }
++   public boolean canUseFertilizer(World worldIn, Random rand, BlockPos pos, BlockState state, net.minecraftforge.plants.IFertilizer fertilizer) { return (double)worldIn.field_73012_v.nextFloat() < 0.45D * fertilizer.getPotency();}
+ }

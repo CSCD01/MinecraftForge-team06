@@ -202,14 +202,14 @@
 +       if (plantable instanceof BushBlock && ((BushBlock)plantable).func_200014_a_(state, world, pos))
 +           return true;
 +
-+       switch (type) {
-+           case Desert: return this.getBlock() == Blocks.field_150354_m || this.getBlock() == Blocks.field_150405_ch || this.getBlock() instanceof GlazedTerracottaBlock;
-+           case Nether: return this.getBlock() == Blocks.field_150425_aM;
-+           case Crop:   return this.getBlock() == Blocks.field_150458_ak;
-+           case Cave:   return Block.func_220056_d(state, world, pos, Direction.UP);
-+           case Plains: return this.getBlock() == Blocks.field_196658_i || net.minecraftforge.common.Tags.Blocks.DIRT.func_199685_a_(this) || this.getBlock() == Blocks.field_150458_ak;
-+           case Water:  return state.func_185904_a() == Material.field_151586_h; //&& state.getValue(BlockLiquidWrapper)
-+           case Beach:
++       switch (type.getName()) {
++           case "desert": return this.getBlock() == Blocks.field_150354_m || this.getBlock() == Blocks.field_150405_ch || this.getBlock() instanceof GlazedTerracottaBlock;
++           case "nether": return this.getBlock() == Blocks.field_150425_aM;
++           case "crop":   return this.getBlock() == Blocks.field_150458_ak;
++           case "cave":   return Block.func_220056_d(state, world, pos, Direction.UP);
++           case "plains": return this.getBlock() == Blocks.field_196658_i || net.minecraftforge.common.Tags.Blocks.DIRT.func_199685_a_(this) || this.getBlock() == Blocks.field_150458_ak;
++           case "water":  return state.func_185904_a() == Material.field_151586_h; //&& state.getValue(BlockLiquidWrapper)
++           case "beach":
 +               boolean isBeach = this.getBlock() == Blocks.field_196658_i || net.minecraftforge.common.Tags.Blocks.DIRT.func_199685_a_(this) || this.getBlock() == Blocks.field_150354_m;
 +               boolean hasWater = (world.func_180495_p(pos.func_177974_f()).func_185904_a() == Material.field_151586_h ||
 +                       world.func_180495_p(pos.func_177976_e()).func_185904_a() == Material.field_151586_h ||

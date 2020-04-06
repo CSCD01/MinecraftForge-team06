@@ -1,0 +1,53 @@
+--- a/net/minecraft/block/BambooSaplingBlock.java
++++ b/net/minecraft/block/BambooSaplingBlock.java
+@@ -17,8 +17,9 @@
+ import net.minecraft.world.IWorldReader;
+ import net.minecraft.world.World;
+ import net.minecraft.world.server.ServerWorld;
++import net.minecraftforge.common.PlantType;
+ 
+-public class BambooSaplingBlock extends Block implements IGrowable {
++public class BambooSaplingBlock extends Block implements IGrowable, net.minecraftforge.common.IPlantable {
+    protected static final VoxelShape field_220088_a = Block.func_208617_a(4.0D, 0.0D, 4.0D, 12.0D, 12.0D, 12.0D);
+ 
+    public BambooSaplingBlock(Block.Properties p_i49997_1_) {
+@@ -61,7 +62,7 @@
+       return new ItemStack(Items.field_222068_kQ);
+    }
+ 
+-   public boolean func_176473_a(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
++   public boolean canGrow(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
+       return p_176473_1_.func_180495_p(p_176473_2_.func_177984_a()).func_196958_f();
+    }
+ 
+@@ -69,8 +70,18 @@
+       return true;
+    }
+ 
+-   public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) {
+-      this.func_220087_a(p_225535_1_, p_225535_3_);
++   public void grow(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_, net.minecraftforge.plants.IFertilizer fertilizer) {
++      int i = p_225535_2_.nextInt(1 * (int) fertilizer.getPotency());
++      if (i < 3)
++      {
++          this.func_220087_a(p_225535_1_, p_225535_3_);
++      } else {
++          p_225535_1_.func_180501_a(p_225535_3_.func_177981_b(1), Blocks.field_222405_kQ.func_176223_P().func_206870_a(BambooBlock.field_220265_e, BambooLeaves.SMALL), 3);
++          BambooBlock bamboo = (BambooBlock) p_225535_1_.func_180495_p(p_225535_3_.func_177984_a()).func_177230_c();
++          for (int j = 1; j < i - 1; j++) {
++              bamboo.func_225535_a_(p_225535_1_,p_225535_2_,p_225535_3_,p_225535_4_);
++          }
++      }
+    }
+ 
+    public float func_180647_a(BlockState p_180647_1_, PlayerEntity p_180647_2_, IBlockReader p_180647_3_, BlockPos p_180647_4_) {
+@@ -80,4 +91,9 @@
+    protected void func_220087_a(World p_220087_1_, BlockPos p_220087_2_) {
+       p_220087_1_.func_180501_a(p_220087_2_.func_177984_a(), Blocks.field_222405_kQ.func_176223_P().func_206870_a(BambooBlock.field_220265_e, BambooLeaves.SMALL), 3);
+    }
++
++   public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) {grow(p_225535_1_, p_225535_2_, p_225535_3_, p_225535_4_, (net.minecraftforge.plants.IFertilizer) Items.field_196106_bc);}
++
++    @Override public BlockState getPlant(IBlockReader world, BlockPos pos) { return world.func_180495_p(pos); }
++
+ }

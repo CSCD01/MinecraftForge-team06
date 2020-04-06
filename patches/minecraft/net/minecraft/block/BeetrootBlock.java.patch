@@ -1,0 +1,13 @@
+--- a/net/minecraft/block/BeetrootBlock.java
++++ b/net/minecraft/block/BeetrootBlock.java
+@@ -40,8 +40,8 @@
+ 
+    }
+ 
+-   protected int func_185529_b(World p_185529_1_) {
+-      return super.func_185529_b(p_185529_1_) / 3;
++   protected int getBonemealAgeIncrease(World worldIn, net.minecraftforge.plants.IFertilizer fertilizer) {
++      return super.getBonemealAgeIncrease(worldIn, fertilizer) / 3;
+    }
+ 
+    protected void func_206840_a(StateContainer.Builder<Block, BlockState> p_206840_1_) {

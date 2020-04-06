@@ -19,31 +19,39 @@
 
 package net.minecraftforge.common;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import com.google.common.collect.Maps;
+import java.util.Map;
+import java.util.regex.Pattern;
 
-public enum PlantType
+public final class PlantType
 {
-    Plains,
-    Desert,
-    Beach,
-    Cave,
-    Water,
-    Nether,
-    Crop;
+    private static final Pattern VALID_NAME = Pattern.compile("[^a-z_]"); //Only a-z and _ are allowed, meaning names must be lower case. And use _ to separate words.
+    private static final Map<String, PlantType> values = Maps.newHashMap();
 
-    /**
-     * Getting a custom {@link PlantType}, or an existing one if it has the same name as that one. Your plant should implement {@link IPlantable}
-     * and return this custom type in {@link IPlantable#getPlantType(IBlockAccess, BlockPos)}.
-     *
-     * <p>If your new plant grows on blocks like any one of them above, never create a new {@link PlantType}.
-     * This enumeration is only functioning in
-     * {@link net.minecraft.block.Block#canSustainPlant(IBlockState, IWorldReader, BlockPos, EnumFacing, IPlantable)},
-     * which you are supposed to override this function in your new block and create a new plant type to grow on that block.
-     *
-     * <p>You can create an instance of your plant type in your API and let your/others mods access it. It will be faster than calling this method.
-     * @param name the name of the type of plant, you had better follow the style above
-     * @return the acquired {@link PlantType}, a new one if not found.
-     */
-    public static PlantType create(String name){ return null; }
+    public static final PlantType Plains = get("plains");
+    public static final PlantType Desert = get("desert");
+    public static final PlantType Beach = get("beach");
+    public static final PlantType Cave = get("cave");
+    public static final PlantType Water = get("water");
+    public static final PlantType Nether = get("nether");
+    public static final PlantType Crop = get("crop");
+
+    public static PlantType get(String name)
+    {
+        if (VALID_NAME.matcher(name).find())
+            throw new IllegalArgumentException("PlantType.get() called with invalid name: " + name);
+        return values.computeIfAbsent(name, k -> new PlantType(name));
+    }
+
+    private final String name;
+
+    private PlantType(String name)
+    {
+        this.name = name;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
 }

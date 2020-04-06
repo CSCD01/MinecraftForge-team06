@@ -9,3 +9,34 @@
     protected static final VoxelShape field_196389_a = Block.func_208617_a(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
  
     protected TallGrassBlock(Block.Properties p_i48310_1_) {
+@@ -19,7 +19,7 @@
+       return field_196389_a;
+    }
+ 
+-   public boolean func_176473_a(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
++   public boolean canGrow(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
+       return true;
+    }
+ 
+@@ -28,14 +28,16 @@
+    }
+ 
+    public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) {
+-      DoublePlantBlock doubleplantblock = (DoublePlantBlock)(this == Blocks.field_196554_aH ? Blocks.field_196805_gi : Blocks.field_196804_gh);
+-      if (doubleplantblock.func_176223_P().func_196955_c(p_225535_1_, p_225535_3_) && p_225535_1_.func_175623_d(p_225535_3_.func_177984_a())) {
+-         doubleplantblock.func_196390_a(p_225535_1_, p_225535_3_, 2);
+-      }
+-
++       grow(p_225535_1_, p_225535_2_, p_225535_3_, p_225535_4_, (net.minecraftforge.plants.IFertilizer) net.minecraft.item.Items.field_196106_bc);
+    }
+ 
+    public Block.OffsetType func_176218_Q() {
+       return Block.OffsetType.XYZ;
+    }
++   public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state, net.minecraftforge.plants.IFertilizer fertilizer) {
++       DoublePlantBlock doubleplantblock = (DoublePlantBlock)(this == Blocks.field_196554_aH ? Blocks.field_196805_gi : Blocks.field_196804_gh);
++       if (doubleplantblock.func_176223_P().func_196955_c(world, pos) && world.func_175623_d(pos.func_177984_a()) && rand.nextFloat() < fertilizer.getPotency()) {
++           doubleplantblock.func_196390_a(world, pos, 2);
++       }
++   }
+ }

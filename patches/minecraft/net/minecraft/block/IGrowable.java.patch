@@ -1,0 +1,19 @@
+--- a/net/minecraft/block/IGrowable.java
++++ b/net/minecraft/block/IGrowable.java
+@@ -5,11 +5,14 @@
+ import net.minecraft.world.IBlockReader;
+ import net.minecraft.world.World;
+ import net.minecraft.world.server.ServerWorld;
++import net.minecraftforge.plants.IFertilizer;
+ 
+-public interface IGrowable {
+-   boolean func_176473_a(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_);
++public interface IGrowable extends net.minecraftforge.plants.IForgeGrowable {
++   boolean canGrow(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_);
+ 
+    boolean func_180670_a(World p_180670_1_, Random p_180670_2_, BlockPos p_180670_3_, BlockState p_180670_4_);
+ 
+    void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_);
++   default void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state, IFertilizer fertilizer) {func_225535_a_(world, rand, pos, state);};
++   default boolean canUseFertilizer(World worldIn, Random rand, BlockPos pos, BlockState state, net.minecraftforge.plants.IFertilizer fertilizer) {return func_180670_a(worldIn, rand, pos, state);}
+ }

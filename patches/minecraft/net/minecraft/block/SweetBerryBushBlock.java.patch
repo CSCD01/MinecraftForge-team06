@@ -11,3 +11,26 @@
        }
  
     }
+@@ -89,7 +90,7 @@
+       p_206840_1_.func_206894_a(field_220125_a);
+    }
+ 
+-   public boolean func_176473_a(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
++   public boolean canGrow(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
+       return p_176473_3_.func_177229_b(field_220125_a) < 3;
+    }
+ 
+@@ -98,7 +99,11 @@
+    }
+ 
+    public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) {
+-      int i = Math.min(3, p_225535_4_.func_177229_b(field_220125_a) + 1);
+-      p_225535_1_.func_180501_a(p_225535_3_, p_225535_4_.func_206870_a(field_220125_a, Integer.valueOf(i)), 2);
++      grow(p_225535_1_, p_225535_2_, p_225535_3_, p_225535_4_, (net.minecraftforge.plants.IFertilizer) Items.field_196106_bc);
+    }
++
++    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state, net.minecraftforge.plants.IFertilizer fertilizer) {
++        int i = Math.min(3, (int) (state.func_177229_b(field_220125_a) + 1 * fertilizer.getPotency()));
++        world.func_180501_a(pos, state.func_206870_a(field_220125_a, Integer.valueOf(i)), 2);
++    }
+ }

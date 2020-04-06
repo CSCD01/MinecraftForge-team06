@@ -1,6 +1,15 @@
 --- a/net/minecraft/block/CropsBlock.java
 +++ b/net/minecraft/block/CropsBlock.java
-@@ -58,12 +58,14 @@
+@@ -19,6 +19,8 @@
+ import net.minecraft.world.World;
+ import net.minecraft.world.server.ServerWorld;
+ 
++import jdk.nashorn.internal.ir.IfNode;
++
+ public class CropsBlock extends BushBlock implements IGrowable {
+    public static final IntegerProperty field_176488_a = BlockStateProperties.field_208170_W;
+    private static final VoxelShape[] field_196393_a = new VoxelShape[]{Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+@@ -58,30 +60,32 @@
  
     public void func_225534_a_(BlockState p_225534_1_, ServerWorld p_225534_2_, BlockPos p_225534_3_, Random p_225534_4_) {
        super.func_225534_a_(p_225534_1_, p_225534_2_, p_225534_3_, p_225534_4_);
@@ -16,7 +25,30 @@
              }
           }
        }
-@@ -92,9 +94,9 @@
+ 
+    }
+ 
+-   public void func_176487_g(World p_176487_1_, BlockPos p_176487_2_, BlockState p_176487_3_) {
+-      int i = this.func_185527_x(p_176487_3_) + this.func_185529_b(p_176487_1_);
++   public void grow(World worldIn, BlockPos pos, BlockState state, net.minecraftforge.plants.IFertilizer fertilizer) {
++      int i = this.func_185527_x(state) + this.getBonemealAgeIncrease(worldIn, fertilizer);
+       int j = this.func_185526_g();
+       if (i > j) {
+          i = j;
+       }
+ 
+-      p_176487_1_.func_180501_a(p_176487_2_, this.func_185528_e(i), 2);
++      worldIn.func_180501_a(pos, this.func_185528_e(i), 2);
+    }
+ 
+-   protected int func_185529_b(World p_185529_1_) {
+-      return MathHelper.func_76136_a(p_185529_1_.field_73012_v, 2, 5);
++   protected int getBonemealAgeIncrease(World worldIn, net.minecraftforge.plants.IFertilizer fertilizer) {
++      return MathHelper.func_76136_a(worldIn.field_73012_v, (int) fertilizer.getPotency() * 2, (int) fertilizer.getPotency() * 5);
+    }
+ 
+    protected static float func_180672_a(Block p_180672_0_, IBlockReader p_180672_1_, BlockPos p_180672_2_) {
+@@ -92,9 +96,9 @@
           for(int j = -1; j <= 1; ++j) {
              float f1 = 0.0F;
              BlockState blockstate = p_180672_1_.func_180495_p(blockpos.func_177982_a(i, 0, j));
@@ -28,7 +60,7 @@
                    f1 = 3.0F;
                 }
              }
-@@ -130,7 +132,7 @@
+@@ -130,7 +134,7 @@
     }
  
     public void func_196262_a(BlockState p_196262_1_, World p_196262_2_, BlockPos p_196262_3_, Entity p_196262_4_) {
@@ -37,3 +69,25 @@
           p_196262_2_.func_225521_a_(p_196262_3_, true, p_196262_4_);
        }
  
+@@ -145,7 +149,7 @@
+       return new ItemStack(this.func_199772_f());
+    }
+ 
+-   public boolean func_176473_a(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
++   public boolean canGrow(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
+       return !this.func_185525_y(p_176473_3_);
+    }
+ 
+@@ -154,10 +158,11 @@
+    }
+ 
+    public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) {
+-      this.func_176487_g(p_225535_1_, p_225535_3_, p_225535_4_);
++      this.grow(p_225535_1_, p_225535_3_, p_225535_4_, (net.minecraftforge.plants.IFertilizer) Items.field_196106_bc);
+    }
+ 
+    protected void func_206840_a(StateContainer.Builder<Block, BlockState> p_206840_1_) {
+       p_206840_1_.func_206894_a(field_176488_a);
+    }
++   public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state, net.minecraftforge.plants.IFertilizer fertilizer) {this.grow(world, pos, state, fertilizer);}
+ }

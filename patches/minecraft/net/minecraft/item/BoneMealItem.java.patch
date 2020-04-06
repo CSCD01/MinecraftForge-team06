@@ -1,6 +1,26 @@
 --- a/net/minecraft/item/BoneMealItem.java
 +++ b/net/minecraft/item/BoneMealItem.java
-@@ -27,7 +27,7 @@
+@@ -1,5 +1,7 @@
+ package net.minecraft.item;
+ 
++import java.util.Collections;
++
+ import javax.annotation.Nullable;
+ import net.minecraft.block.BlockState;
+ import net.minecraft.block.Blocks;
+@@ -17,8 +19,10 @@
+ import net.minecraft.world.server.ServerWorld;
+ import net.minecraftforge.api.distmarker.Dist;
+ import net.minecraftforge.api.distmarker.OnlyIn;
++import net.minecraftforge.common.PlantType;
+ 
+-public class BoneMealItem extends Item {
++public class BoneMealItem extends Item implements net.minecraftforge.plants.IFertilizer
++{
+    public BoneMealItem(Item.Properties p_i50055_1_) {
+       super(p_i50055_1_);
+    }
+@@ -27,7 +31,7 @@
        World world = p_195939_1_.func_195991_k();
        BlockPos blockpos = p_195939_1_.func_195995_a();
        BlockPos blockpos1 = blockpos.func_177972_a(p_195939_1_.func_196000_l());
@@ -9,7 +29,7 @@
           if (!world.field_72995_K) {
              world.func_217379_c(2005, blockpos, 0);
           }
-@@ -48,8 +48,17 @@
+@@ -48,14 +52,23 @@
        }
     }
  
@@ -22,12 +42,23 @@
 +
 +   public static boolean applyBonemeal(ItemStack p_195966_0_, World p_195966_1_, BlockPos p_195966_2_, net.minecraft.entity.player.PlayerEntity player) {
        BlockState blockstate = p_195966_1_.func_180495_p(p_195966_2_);
+-      if (blockstate.func_177230_c() instanceof IGrowable) {
+-         IGrowable igrowable = (IGrowable)blockstate.func_177230_c();
+-         if (igrowable.func_176473_a(p_195966_1_, p_195966_2_, blockstate, p_195966_1_.field_72995_K)) {
 +      int hook = net.minecraftforge.event.ForgeEventFactory.onApplyBonemeal(player, p_195966_1_, p_195966_2_, blockstate, p_195966_0_);
 +      if (hook != 0) return hook > 0;
-       if (blockstate.func_177230_c() instanceof IGrowable) {
-          IGrowable igrowable = (IGrowable)blockstate.func_177230_c();
-          if (igrowable.func_176473_a(p_195966_1_, p_195966_2_, blockstate, p_195966_1_.field_72995_K)) {
-@@ -87,7 +96,9 @@
++      if (blockstate.func_177230_c() instanceof net.minecraftforge.plants.IForgeGrowable) {
++          net.minecraftforge.plants.IForgeGrowable igrowable = (net.minecraftforge.plants.IForgeGrowable)blockstate.func_177230_c();
++         if (((BoneMealItem) Items.field_196106_bc).getValidPlantTypes().contains(((net.minecraftforge.common.IPlantable) igrowable).getPlantType(p_195966_1_, p_195966_2_)) && igrowable.canGrow(p_195966_1_, p_195966_2_, blockstate, p_195966_1_.field_72995_K)) {
+             if (p_195966_1_ instanceof ServerWorld) {
+-               if (igrowable.func_180670_a(p_195966_1_, p_195966_1_.field_73012_v, p_195966_2_, blockstate)) {
+-                  igrowable.func_225535_a_((ServerWorld)p_195966_1_, p_195966_1_.field_73012_v, p_195966_2_, blockstate);
++               if (igrowable.canUseFertilizer(p_195966_1_, p_195966_1_.field_73012_v, p_195966_2_, blockstate, (net.minecraftforge.plants.IFertilizer) p_195966_0_.func_77973_b())) {
++                  igrowable.grow((ServerWorld)p_195966_1_, p_195966_1_.field_73012_v, p_195966_2_, blockstate, (net.minecraftforge.plants.IFertilizer) p_195966_0_.func_77973_b());
+                }
+ 
+                p_195966_0_.func_190918_g(1);
+@@ -87,7 +100,9 @@
                    }
                 }
  
@@ -38,7 +69,7 @@
                    if (i == 0 && p_203173_3_ != null && p_203173_3_.func_176740_k().func_176722_c()) {
                       blockstate = BlockTags.field_211922_B.func_205596_a(p_203173_1_.field_73012_v).func_176223_P().func_206870_a(DeadCoralWallFanBlock.field_211884_b, p_203173_3_);
                    } else if (field_77697_d.nextInt(4) == 0) {
-@@ -126,7 +137,7 @@
+@@ -126,7 +141,7 @@
        }
  
        BlockState blockstate = p_195965_0_.func_180495_p(p_195965_1_);
@@ -47,3 +78,11 @@
           for(int i = 0; i < p_195965_2_; ++i) {
              double d0 = field_77697_d.nextGaussian() * 0.02D;
              double d1 = field_77697_d.nextGaussian() * 0.02D;
+@@ -136,4 +151,7 @@
+ 
+       }
+    }
++
++   @Override public float getPotency() {return 5.0f;};
++   @Override public java.util.List<net.minecraftforge.common.PlantType> getValidPlantTypes() {return java.util.Arrays.asList(PlantType.Cave, PlantType.Crop, PlantType.Plains);}
+ }

@@ -9,3 +9,32 @@
     protected static final VoxelShape field_207798_a = Block.func_208617_a(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
  
     protected SeaGrassBlock(Block.Properties p_i48780_1_) {
+@@ -47,7 +47,7 @@
+       return blockstate;
+    }
+ 
+-   public boolean func_176473_a(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
++   public boolean canGrow(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
+       return true;
+    }
+ 
+@@ -59,11 +59,11 @@
+       return Fluids.field_204546_a.func_207204_a(false);
+    }
+ 
+-   public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) {
++   public void grow(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_, net.minecraftforge.plants.IFertilizer fertilizer) {
+       BlockState blockstate = Blocks.field_203199_aR.func_176223_P();
+       BlockState blockstate1 = blockstate.func_206870_a(TallSeaGrassBlock.field_208065_c, DoubleBlockHalf.UPPER);
+       BlockPos blockpos = p_225535_3_.func_177984_a();
+-      if (p_225535_1_.func_180495_p(blockpos).func_177230_c() == Blocks.field_150355_j) {
++      if (p_225535_1_.func_180495_p(blockpos).func_177230_c() == Blocks.field_150355_j && p_225535_2_.nextFloat() < fertilizer.getPotency()) {
+          p_225535_1_.func_180501_a(p_225535_3_, blockstate, 2);
+          p_225535_1_.func_180501_a(blockpos, blockstate1, 2);
+       }
+@@ -77,4 +77,5 @@
+    public boolean func_204509_a(IWorld p_204509_1_, BlockPos p_204509_2_, BlockState p_204509_3_, IFluidState p_204509_4_) {
+       return false;
+    }
++   public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) { grow(p_225535_1_, p_225535_2_, p_225535_3_, p_225535_4_, (net.minecraftforge.plants.IFertilizer) net.minecraft.item.Items.field_196106_bc);}
+ }

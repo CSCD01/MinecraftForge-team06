@@ -1,0 +1,42 @@
+--- a/net/minecraft/block/BambooBlock.java
++++ b/net/minecraft/block/BambooBlock.java
+@@ -24,7 +24,7 @@
+ import net.minecraft.world.World;
+ import net.minecraft.world.server.ServerWorld;
+ 
+-public class BambooBlock extends Block implements IGrowable {
++public class BambooBlock extends Block implements IGrowable, net.minecraftforge.common.IPlantable {
+    protected static final VoxelShape field_220261_a = Block.func_208617_a(5.0D, 0.0D, 5.0D, 11.0D, 16.0D, 11.0D);
+    protected static final VoxelShape field_220262_b = Block.func_208617_a(3.0D, 0.0D, 3.0D, 13.0D, 16.0D, 13.0D);
+    protected static final VoxelShape field_220263_c = Block.func_208617_a(6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
+@@ -117,7 +117,7 @@
+       return super.func_196271_a(p_196271_1_, p_196271_2_, p_196271_3_, p_196271_4_, p_196271_5_, p_196271_6_);
+    }
+ 
+-   public boolean func_176473_a(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
++   public boolean canGrow(IBlockReader p_176473_1_, BlockPos p_176473_2_, BlockState p_176473_3_, boolean p_176473_4_) {
+       int i = this.func_220259_a(p_176473_1_, p_176473_2_);
+       int j = this.func_220260_b(p_176473_1_, p_176473_2_);
+       return i + j + 1 < 16 && p_176473_1_.func_180495_p(p_176473_2_.func_177981_b(i)).func_177229_b(field_220266_f) != 1;
+@@ -127,11 +127,11 @@
+       return true;
+    }
+ 
+-   public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) {
++   public void grow(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_, net.minecraftforge.plants.IFertilizer fertilizer) {
+       int i = this.func_220259_a(p_225535_1_, p_225535_3_);
+       int j = this.func_220260_b(p_225535_1_, p_225535_3_);
+       int k = i + j + 1;
+-      int l = 1 + p_225535_2_.nextInt(2);
++      int l = 1 + p_225535_2_.nextInt(2) * (int) fertilizer.getPotency();
+ 
+       for(int i1 = 0; i1 < l; ++i1) {
+          BlockPos blockpos = p_225535_3_.func_177981_b(i);
+@@ -192,4 +192,7 @@
+ 
+       return i;
+    }
++
++   public void func_225535_a_(ServerWorld p_225535_1_, Random p_225535_2_, BlockPos p_225535_3_, BlockState p_225535_4_) {grow(p_225535_1_, p_225535_2_, p_225535_3_, p_225535_4_, (net.minecraftforge.plants.IFertilizer) net.minecraft.item.Items.field_196106_bc);}
++   @Override public BlockState getPlant(IBlockReader world, BlockPos pos) { return world.func_180495_p(pos); }
+ }

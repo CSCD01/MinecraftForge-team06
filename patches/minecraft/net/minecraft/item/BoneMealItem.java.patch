@@ -83,6 +83,6 @@
        }
     }
 +
-+   @Override public float getPotency() {return 5.0f;};
++   @Override public float getPotency() {return 1.0f;};
 +   @Override public java.util.List<net.minecraftforge.common.PlantType> getValidPlantTypes() {return java.util.Arrays.asList(PlantType.Cave, PlantType.Crop, PlantType.Plains);}
  }

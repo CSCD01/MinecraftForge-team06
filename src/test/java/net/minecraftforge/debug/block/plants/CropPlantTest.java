@@ -46,7 +46,7 @@ public class CropPlantTest
                 || plantBlock == Blocks.POTATOES || plantBlock == Blocks.MELON_STEM)
         {
 
-            // Check to see that the flower was placed on valid ground (dirt or grass)
+            // Check to see that the crop was placed on valid ground (dirt or grass)
             Block plantOn = event.getPlacedAgainst().getBlock();
             Validate.isTrue(plantOn == Blocks.FARMLAND);
 

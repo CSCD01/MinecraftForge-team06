@@ -69,3 +69,7 @@ loaderVersion="[28,)"
     modId="crop_plant_test"
 [[mods]]
     modId="other_plant_test"
+[[mods]]
+    modId="custom_plant_place_test"
+[[mods]]
+    modId="custom_fertilizer_test"

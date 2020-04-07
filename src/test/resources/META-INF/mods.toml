@@ -73,3 +73,5 @@ loaderVersion="[28,)"
     modId="custom_plant_place_test"
 [[mods]]
     modId="custom_fertilizer_test"
+[[mods]]
+    modId="nether_wart_test"

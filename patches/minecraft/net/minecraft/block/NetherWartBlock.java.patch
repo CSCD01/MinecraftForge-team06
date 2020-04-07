@@ -1,6 +1,19 @@
 --- a/net/minecraft/block/NetherWartBlock.java
 +++ b/net/minecraft/block/NetherWartBlock.java
-@@ -31,9 +31,10 @@
+@@ -10,9 +10,11 @@
+ import net.minecraft.util.math.shapes.ISelectionContext;
+ import net.minecraft.util.math.shapes.VoxelShape;
+ import net.minecraft.world.IBlockReader;
++import net.minecraft.world.World;
+ import net.minecraft.world.server.ServerWorld;
++import net.minecraftforge.common.PlantType;
+ 
+-public class NetherWartBlock extends BushBlock {
++public class NetherWartBlock extends BushBlock implements net.minecraftforge.plants.IForgeGrowable {
+    public static final IntegerProperty field_176486_a = BlockStateProperties.field_208168_U;
+    private static final VoxelShape[] field_196399_b = new VoxelShape[]{Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 5.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 11.0D, 16.0D), Block.func_208617_a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D)};
+ 
+@@ -31,9 +33,10 @@
  
     public void func_225534_a_(BlockState p_225534_1_, ServerWorld p_225534_2_, BlockPos p_225534_3_, Random p_225534_4_) {
        int i = p_225534_1_.func_177229_b(field_176486_a);
@@ -12,3 +25,24 @@
        }
  
        super.func_225534_a_(p_225534_1_, p_225534_2_, p_225534_3_, p_225534_4_);
+@@ -46,4 +49,20 @@
+    protected void func_206840_a(StateContainer.Builder<Block, BlockState> p_206840_1_) {
+       p_206840_1_.func_206894_a(field_176486_a);
+    }
++
++   @Override
++   public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
++      return state.func_177229_b(field_176486_a) < 3;
++   }
++
++   @Override
++   public boolean canUseFertilizer(World worldIn, Random rand, BlockPos pos, BlockState state, net.minecraftforge.plants.IFertilizer fertilizer) {
++      return state.func_177229_b(field_176486_a) < 3 && fertilizer.getValidPlantTypes().contains(PlantType.Nether);
++   }
++
++   @Override
++   public void grow(ServerWorld world, Random random, BlockPos pos, BlockState bState, net.minecraftforge.plants.IFertilizer fertilizer) {
++      int i = (int)fertilizer.getPotency() * 1;
++      world.func_180501_a(pos, bState.func_206870_a(field_176486_a, Math.min(3, i)), 2);
++   }
+ }
